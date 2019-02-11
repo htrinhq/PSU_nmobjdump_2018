@@ -41,15 +41,9 @@ NM_OBJ	=	$(NM_SRCS:.c=.o)
 
 OBJDUMP_OBJ	=	$(OBJDUMP_SRCS:.c=.o)
 
-auth:
-	@printf "$(ORANGE)   ____  ____  __  __ _  _  _        __   _  _  _  _      ____   __    __  ___  \n$(WHITE)"
-	@printf "$(ORANGE)  (_  _)(  _ \(  )(  ( \/ )( \ ___  /  \ / )( \( \/ )    (___ \ /  \  /  \/ _ \ \n$(WHITE)"
-	@printf "$(ORANGE)    )(   )   / )( /    /) __ ((___)(  O )) \/ ( )  /____  / __/(  0 )(_/ /\__  )\n$(WHITE)"
-	@printf "$(ORANGE)   (__) (__\_)(__)\_)__)\_)(_/      \__\)\____/(__/(____)(____) \__/  (__)(___/ \n$(WHITE)"
-
 debug:	CFLAGS += $(G)
 
-all:	$(NM_NAME) $(OBJDUMP_NAME)
+all:	auth $(NM_NAME) $(OBJDUMP_NAME)
 	@printf "$(GREEN)MY_NM AND MY_OBJDUMP CREATED\n$(WHITE)"
 
 $(NM_NAME):	$(NM_OBJ)
