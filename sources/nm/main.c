@@ -5,10 +5,12 @@
 ** main
 */
 
-#include <stdio.h>
+#include "nm.h"
 
 int main(int argc, char const *argv[])
 {
-	printf("NM\n");
-	return 0;
+    if (argc != 2)
+        return 84;
+    printf("NM: %s\n", argv[1]);
+    return 0;
 }
