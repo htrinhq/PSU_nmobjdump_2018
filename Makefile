@@ -53,11 +53,13 @@ $(OBJDUMP_NAME):	$(OBJDUMP_OBJ)
 	$(CC) -o $@ $^
 
 debug:	$(NM_NAME) $(OBJDUMP_NAME) $(debug)
-	@printf "$(GREEN)DEBUG BUILD COMPLETED$(WHITE)"
+	@printf "$(GREEN)DEBUG BUILD COMPLETED\n$(WHITE)"
 
 nm:	$(NM_NAME)
+	@printf "$(GREEN)MY_NM CREATED\n$(WHITE)"
 
 objdump: $(OBJDUMP_NAME)
+	@printf "$(GREEN)MY_OBJDUMP CREATED\n$(WHITE)"
 
 clean:
 	rm -f $(NM_OBJ) $(OBJDUMP_OBJ)
