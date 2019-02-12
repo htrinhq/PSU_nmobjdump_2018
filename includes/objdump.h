@@ -13,7 +13,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <libelf.h>
+#include <zconf.h>
+#include <sys/mman.h>
 
-int my_objdump(const char *file_name, int fd);
+int my_objdump(int fd);
 
 #endif

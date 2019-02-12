@@ -2,3 +2,4 @@
 *.a
 my_nm
 my_objdump
+flags.h
