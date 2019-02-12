@@ -29,10 +29,18 @@ int my_objdump(int fd)
         shdr = (Elf64_Shdr *)(data + elf->e_shoff);
         strtab = (char *)(data + shdr[elf->e_shstrndx].sh_offset);
         for (size_t i = 1; i < elf->e_shnum; i++) {
-            if (shdr[i].sh_addr != 0)
+            if (data + shdr[i].sh_offset == (void *)(strtab)) {
+                break;
+            }
+            if (shdr[i].sh_type != SHT_NOBITS
+            && shdr[i].sh_type != SHT_SYMTAB
+            && strcmp(&strtab[shdr[i].sh_name], ".strtab")
+            /*&& &strtab[shdr[i].sh_name]*/) {
                 printf("Contents of section %s:\n", &strtab[shdr[i].sh_name]);
+                printf(" %04x\n", (unsigned)(shdr[i].sh_addr));
+            }
         }
-        display_values(elf);
+        //display_values(elf);
         return (0);
     }
     return (84);

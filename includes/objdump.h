@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <libelf.h>
 #include <zconf.h>
+#include <string.h>
 #include <sys/mman.h>
 
 int my_objdump(int fd);
