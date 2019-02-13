@@ -83,6 +83,7 @@ auth:
 	@printf "$(ORANGE)(_  _)(  _ \(  )(  ( \/ )( \ ___  /  \ / )( \( \/ )    (___ \ /  \  /  \/ _ \ \n$(WHITE)"
 	@printf "$(ORANGE)  )(   )   / )( /    /) __ ((___)(  O )) \/ ( )  /____  / __/(  0 )(_/ /\__  )\n$(WHITE)"
 	@printf "$(ORANGE) (__) (__\_)(__)\_)__)\_)(_/      \__\)\____/(__/(____)(____) \__/  (__)(___/ \n$(WHITE)"
+	@printf "$(ORANGE)                                                                              \n$(WHITE)"
 
 .PHONY:	all clean fclean re objre nmre auth
 

@@ -18,7 +18,8 @@
 #include <zconf.h>
 #include <string.h>
 #include <sys/mman.h>
+#include "flags.h"
 
-int my_objdump(int fd);
+int my_objdump(int fd, const char *filename);
 
 #endif
