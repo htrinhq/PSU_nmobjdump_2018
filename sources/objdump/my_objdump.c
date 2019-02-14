@@ -7,6 +7,46 @@
 
 #include "objdump.h"
 
+int get_zero(size_t nb)
+{
+    size_t i = 0;
+
+    while (nb / 10) {
+        nb /= 10;
+        i++;
+    }
+    return (i < 4 ? 4 : i);
+}
+
+void display_section_parser(Elf64_Shdr *shdr, char *strtab,
+size_t i, size_t bit_shifted)
+{
+    char *hexa = calloc(36, sizeof(char));
+    char *printed_array = calloc(17, sizeof(char));
+    size_t size = 0;
+   // size_t max = (bit_shifted + shdr[i].sh_size < 16) ?
+   // 16 - (16 - bit_shifted + shdr[i].sh_size) : 16;
+
+    strtab += bit_shifted + shdr[i].sh_offset;
+    for (bit_shifted = 0; bit_shifted < shdr[i].sh_size; bit_shifted += 16) {
+        printf(" %0*lu", get_zero(shdr[i].sh_addr + bit_shifted), shdr[i].sh_addr + bit_shifted);
+        for (size_t count = 0; count < 35 && count < bit_shifted + shdr[i].sh_size; count += 2) {
+            if (count == 8 || count == 17 || count == 26) {
+                sprintf(hexa + count, " ");
+                count++;
+            }
+            isprint(strtab[size + bit_shifted]) ?
+            sprintf(hexa + count, "%02x", strtab[size + bit_shifted]) :
+            sprintf(hexa + count, "00");
+            printed_array[size] = (char)(isprint(strtab[size + bit_shifted])) ?
+            strtab[size + bit_shifted] : '.';
+            size++;
+        }
+        printf(" %-35s  %-16s\n", hexa, printed_array);
+        size = 0;
+    }
+}
+
 size_t get_flags(Elf64_Ehdr *elf, Elf64_Shdr *shdr)
 {
     size_t flags = 0;
@@ -45,7 +85,7 @@ void display_flags(size_t flags)
     printf("\n");
 }
 
-void display_values(Elf64_Ehdr *elf, Elf64_Shdr *shdr, const char *filename)
+void display_header(Elf64_Ehdr *elf, Elf64_Shdr *shdr, const char *filename)
 {
     printf("\n%s:\tfile format %s\n", filename,
     (elf->e_ident[EI_CLASS] == ELFCLASS64) ? "elf64-x86-64" : "elf32-x86-64");
@@ -66,7 +106,8 @@ char *strtab, void *data)
         && data + shdr[i].sh_offset != (void *)(strtab))
         {
             printf("Contents of section %s:\n", &strtab[shdr[i].sh_name]);
-            printf(" %04x\n", (unsigned)(shdr[i].sh_addr));
+            printf(" %04x ", (unsigned)(shdr[i].sh_addr));
+            display_section_parser(shdr, strtab, i, 0);
         }
     }
 }
@@ -83,7 +124,7 @@ int my_objdump(int fd, const char *filename)
         elf = (Elf64_Ehdr *)(data);
         shdr = (Elf64_Shdr *)(data + elf->e_shoff);
         strtab = (char *)(data + shdr[elf->e_shstrndx].sh_offset);
-        display_values(elf, shdr, filename);
+        display_header(elf, shdr, filename);
         display_sections(elf, shdr, strtab, data);
         return (0);
     }
