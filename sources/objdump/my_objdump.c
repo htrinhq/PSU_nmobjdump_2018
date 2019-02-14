@@ -86,6 +86,6 @@ int my_objdump(int fd, const char *filename)
         display_values(elf, shdr, filename);
         display_sections(elf, shdr, strtab, data);
         return (0);
-        }
-        return (84);
     }
+    return (84);
+}
