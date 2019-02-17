@@ -18,11 +18,6 @@ int get_zero(size_t nb)
     return (i < 4 ? 4 : i);
 }
 
-/*int get_zero(size_t nb)
-{
-    char *str;
-}*/
-
 void print_section(size_t shifted, unsigned char *strtab,
 Elf64_Shdr *shdr, size_t size)
 {
@@ -44,7 +39,7 @@ Elf64_Shdr *shdr, size_t size)
             strtab[count + shifted] : '.');
         }
     }
-    printf(" %-35s %-16s\n", hexa, to_print);
+    printf(" %-35s  %-16s\n", hexa, to_print);
 }
 
 void display_section_parser(Elf64_Shdr *shdr, char *strtab,
@@ -52,7 +47,7 @@ size_t i, size_t shifted)
 {
     strtab += shifted + shdr[i].sh_offset;
     for (shifted = 0; shifted < shdr[i].sh_size; shifted += 16) {
-        printf(" %0*lu", get_zero(shdr[i].sh_addr + shifted),
+        printf(" %0*lx", get_zero(shdr[i].sh_addr + shifted),
         shdr[i].sh_addr + shifted);
         print_section(shifted, (unsigned char *) strtab, shdr, i);
     }
@@ -98,7 +93,7 @@ void display_flags(size_t flags)
 
 void display_header(Elf64_Ehdr *elf, Elf64_Shdr *shdr, const char *filename)
 {
-    printf("\n%s:\tfile format %s\n", filename,
+    printf("\n%s:     file format %s\n", filename,
     (elf->e_ident[EI_CLASS] == ELFCLASS64) ? "elf64-x86-64" : "elf32-x86-64");
     printf("architecture: i386:x86-64, flags 0x%08x:\n",
     (unsigned)(get_flags(elf, shdr)));
