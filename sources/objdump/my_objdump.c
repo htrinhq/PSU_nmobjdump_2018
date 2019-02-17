@@ -113,10 +113,17 @@ char *strtab, void *data)
         && data + shdr[i].sh_offset != (void *)(strtab))
         {
             printf("Contents of section %s:\n", &strtab[shdr[i].sh_name]);
-            //printf(" %04x ", (unsigned)(shdr[i].sh_addr));
             display_section_parser(shdr, (char *) (elf), i, shifted);
         }
     }
+}
+
+int check_elf_format(Elf64_Ehdr *elf)
+{
+    return ((elf->e_ident[0] == ELFMAG0
+    && elf->e_ident[1] == ELFMAG1
+    && elf->e_ident[2] == ELFMAG2
+    && elf->e_ident[3] == ELFMAG3) ? 1 : 0);
 }
 
 int my_objdump(int fd, const char *filename)
@@ -129,11 +136,15 @@ int my_objdump(int fd, const char *filename)
 
     if (data) {
         elf = (Elf64_Ehdr *)(data);
+        if (!check_elf_format(elf)) {
+            printf ("objdump: %s: File format not recognized\n", filename);
+            return (1);
+        }
         shdr = (Elf64_Shdr *)(data + elf->e_shoff);
         strtab = (char *)(data + shdr[elf->e_shstrndx].sh_offset);
         display_header(elf, shdr, filename);
         display_sections(elf, shdr, strtab, data);
         return (0);
     }
-    return (84);
+    return (1);
 }
