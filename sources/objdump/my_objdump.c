@@ -18,32 +18,36 @@ int get_zero(size_t nb)
     return (i < 4 ? 4 : i);
 }
 
-void display_section_parser(Elf64_Shdr *shdr, char *strtab,
-size_t i, size_t bit_shifted)
+void print_section(size_t shifted, unsigned char *strtab, Elf64_Shdr *shdr, size_t size)
 {
+    char *to_print = calloc(17, sizeof(char));
     char *hexa = calloc(36, sizeof(char));
-    char *printed_array = calloc(17, sizeof(char));
-    size_t size = 0;
-   // size_t max = (bit_shifted + shdr[i].sh_size < 16) ?
-   // 16 - (16 - bit_shifted + shdr[i].sh_size) : 16;
+    size_t count = 0;
 
-    strtab += bit_shifted + shdr[i].sh_offset;
-    for (bit_shifted = 0; bit_shifted < shdr[i].sh_size; bit_shifted += 16) {
-        printf(" %0*lu", get_zero(shdr[i].sh_addr + bit_shifted), shdr[i].sh_addr + bit_shifted);
-        for (size_t count = 0; count < 35 && count < bit_shifted + shdr[i].sh_size; count += 2) {
-            if (count == 8 || count == 17 || count == 26) {
-                sprintf(hexa + count, " ");
-                count++;
-            }
-            isprint(strtab[size + bit_shifted]) ?
-            sprintf(hexa + count, "%02x", strtab[size + bit_shifted]) :
-            sprintf(hexa + count, "00");
-            printed_array[size] = (char)(isprint(strtab[size + bit_shifted])) ?
-            strtab[size + bit_shifted] : '.';
-            size++;
+    for (size_t s = 0; s < 35; s += 2, count++) {
+        if (s == 8 || s == 17 || s == 26) {
+            sprintf(hexa + s, " ");
+            s++;
         }
-        printf(" %-35s  %-16s\n", hexa, printed_array);
-        size = 0;
+        if (count >= shdr[size].sh_size - shifted) {
+            to_print[count] = ' ';
+            sprintf(hexa + s, " ");
+        } else {
+            sprintf(hexa + s, "%02x", strtab[count + shifted]);
+            to_print[count] = (char)(isprint(strtab[count + shifted]) ?
+            strtab[count + shifted] : '.');
+        }
+    }
+    printf(" %-35s %-16s\n", hexa, to_print);
+}
+
+void display_section_parser(Elf64_Shdr *shdr, char *strtab,
+size_t i, size_t shifted)
+{
+    strtab += shifted + shdr[i].sh_offset;
+    for (shifted = 0; shifted < shdr[i].sh_size; shifted += 16) {
+        printf(" %0*lu", get_zero(shdr[i].sh_addr + shifted), shdr[i].sh_addr + shifted);
+        print_section(shifted, (unsigned char *) strtab, shdr, i);
     }
 }
 
@@ -98,8 +102,9 @@ void display_header(Elf64_Ehdr *elf, Elf64_Shdr *shdr, const char *filename)
 void display_sections(Elf64_Ehdr *elf, Elf64_Shdr *shdr,
 char *strtab, void *data)
 {
-    for (size_t i = 1; i < elf->e_shnum; i++)
-    {
+    size_t shifted = 0;
+
+    for (size_t i = 1; i < elf->e_shnum; i++) {
         if (shdr[i].sh_type != SHT_NOBITS
         && shdr[i].sh_type != SHT_SYMTAB
         && strcmp(&strtab[shdr[i].sh_name], ".strtab")
@@ -107,7 +112,7 @@ char *strtab, void *data)
         {
             printf("Contents of section %s:\n", &strtab[shdr[i].sh_name]);
             printf(" %04x ", (unsigned)(shdr[i].sh_addr));
-            display_section_parser(shdr, strtab, i, 0);
+            display_section_parser(shdr, (char *) (elf), i, shifted);
         }
     }
 }
