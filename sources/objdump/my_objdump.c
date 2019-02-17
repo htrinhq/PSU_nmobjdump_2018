@@ -120,10 +120,10 @@ char *strtab, void *data)
 
 int check_elf_format(Elf64_Ehdr *elf)
 {
-    return ((elf->e_ident[0] == ELFMAG0
-    && elf->e_ident[1] == ELFMAG1
-    && elf->e_ident[2] == ELFMAG2
-    && elf->e_ident[3] == ELFMAG3) ? 1 : 0);
+    return ((elf->e_ident[EI_MAG0] == ELFMAG0
+    && elf->e_ident[EI_MAG1] == ELFMAG1
+    && elf->e_ident[EI_MAG2] == ELFMAG2
+    && elf->e_ident[EI_MAG3] == ELFMAG3) ? 1 : 0);
 }
 
 int my_objdump(int fd, const char *filename)
