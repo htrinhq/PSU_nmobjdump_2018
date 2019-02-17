@@ -18,7 +18,13 @@ int get_zero(size_t nb)
     return (i < 4 ? 4 : i);
 }
 
-void print_section(size_t shifted, unsigned char *strtab, Elf64_Shdr *shdr, size_t size)
+/*int get_zero(size_t nb)
+{
+    char *str;
+}*/
+
+void print_section(size_t shifted, unsigned char *strtab,
+Elf64_Shdr *shdr, size_t size)
 {
     char *to_print = calloc(17, sizeof(char));
     char *hexa = calloc(36, sizeof(char));
@@ -46,7 +52,8 @@ size_t i, size_t shifted)
 {
     strtab += shifted + shdr[i].sh_offset;
     for (shifted = 0; shifted < shdr[i].sh_size; shifted += 16) {
-        printf(" %0*lu", get_zero(shdr[i].sh_addr + shifted), shdr[i].sh_addr + shifted);
+        printf(" %0*lu", get_zero(shdr[i].sh_addr + shifted),
+        shdr[i].sh_addr + shifted);
         print_section(shifted, (unsigned char *) strtab, shdr, i);
     }
 }
@@ -111,7 +118,7 @@ char *strtab, void *data)
         && data + shdr[i].sh_offset != (void *)(strtab))
         {
             printf("Contents of section %s:\n", &strtab[shdr[i].sh_name]);
-            printf(" %04x ", (unsigned)(shdr[i].sh_addr));
+            //printf(" %04x ", (unsigned)(shdr[i].sh_addr));
             display_section_parser(shdr, (char *) (elf), i, shifted);
         }
     }
