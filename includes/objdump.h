@@ -22,5 +22,16 @@
 #include "flags.h"
 
 int my_objdump(int fd, const char *filename);
+void display_section_parser(Elf64_Shdr *shdr, char *strtab,
+size_t i, size_t shifted);
+void display_header(Elf64_Ehdr *elf, Elf64_Shdr *shdr, const char *filename);
+void display_sections(Elf64_Ehdr *elf, Elf64_Shdr *shdr,
+char *strtab, void *data);
+void display_flags(size_t flags);
+void print_section(size_t shifted, unsigned char *strtab,
+Elf64_Shdr *shdr, size_t size);
+int get_zero(size_t nb);
+size_t get_flags(Elf64_Ehdr *elf, Elf64_Shdr *shdr);
+int check_elf_format(Elf64_Ehdr *elf);
 
 #endif

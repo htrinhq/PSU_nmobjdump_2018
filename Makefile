@@ -22,7 +22,9 @@ OBJDUMP_DIR	=	sources/objdump/
 NM_SRC	=	main.c
 
 OBJDUMP_SRC	=	main.c\
-				my_objdump.c
+				my_objdump.c\
+				objdump64.c\
+				display64.c
 
 NM_SRCS	=	$(addprefix $(NM_DIR), $(NM_SRC))
 
