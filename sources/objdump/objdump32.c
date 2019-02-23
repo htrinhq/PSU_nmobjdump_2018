@@ -2,13 +2,13 @@
 ** EPITECH PROJECT, 2019
 ** PSU_2018_nmobjdump
 ** File description:
-** objdump64
+** objdump32
 */
 
 #include "objdump.h"
 
-void print_section(size_t shifted, unsigned char *strtab,
-Elf64_Shdr *shdr, size_t size)
+void print_section32(size_t shifted, unsigned char *strtab,
+Elf32_Shdr *shdr, size_t size)
 {
     char *to_print = calloc(17, sizeof(char));
     char *hexa = calloc(36, sizeof(char));
@@ -32,18 +32,7 @@ Elf64_Shdr *shdr, size_t size)
     printf(" %-35s  %-16s\n", hexa, to_print);
 }
 
-int get_zero(size_t nb)
-{
-    size_t i = 0;
-
-    while (nb / 10) {
-        nb /= 10;
-        i++;
-    }
-    return (i < 4 ? 4 : i);
-}
-
-size_t get_flags(Elf64_Ehdr *elf, Elf64_Shdr *shdr)
+size_t get_flags32(Elf32_Ehdr *elf, Elf32_Shdr *shdr)
 {
     size_t flags = 0;
 
@@ -62,12 +51,4 @@ size_t get_flags(Elf64_Ehdr *elf, Elf64_Shdr *shdr)
             flags |= D_PAGED;
     }
     return flags;
-}
-
-int check_elf_format(Elf64_Ehdr *elf)
-{
-    return ((elf->e_ident[EI_MAG0] == ELFMAG0
-    && elf->e_ident[EI_MAG1] == ELFMAG1
-    && elf->e_ident[EI_MAG2] == ELFMAG2
-    && elf->e_ident[EI_MAG3] == ELFMAG3) ? 1 : 0);
 }

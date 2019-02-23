@@ -7,7 +7,7 @@
 
 #include "objdump.h"
 
-int single_arg()
+int single_arg(void)
 {
     int fd;
     fd = open("a.out", O_RDONLY);
