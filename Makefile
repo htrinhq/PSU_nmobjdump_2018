@@ -19,7 +19,10 @@ NM_DIR	=	sources/nm/
 
 OBJDUMP_DIR	=	sources/objdump/
 
-NM_SRC	=	main.c
+NM_SRC	=	main.c\
+			check.c\
+			nm64.c\
+			symbol64.c
 
 OBJDUMP_SRC	=	main.c\
 				my_objdump.c\
