@@ -14,8 +14,7 @@ Elf32_Shdr *shdr, size_t size)
     char *hexa = calloc(36, sizeof(char));
     size_t count = 0;
 
-    for (size_t s = 0; s < 35; s += 2, count++)
-    {
+    for (size_t s = 0; s < 35; s += 2, count++) {
         if (s == 8 || s == 17 || s == 26) {
             sprintf(hexa + s, " ");
             s++;

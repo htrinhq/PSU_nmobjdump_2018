@@ -25,8 +25,7 @@ int multiple_args(int argc, const char **argv)
     int fd;
     int value = 0;
 
-    for (int i = 1; i < argc; i++)
-    {
+    for (int i = 1; i < argc; i++) {
         fd = open(argv[i], O_RDONLY);
         if (fd == -1)
         {

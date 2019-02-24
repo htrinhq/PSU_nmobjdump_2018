@@ -41,8 +41,7 @@ sym_t *find_symbol(Elf64_Shdr *shdr, char *strtab, Elf64_Ehdr *elf)
     sym_t *symbol = NULL;
     Elf64_Sym *sym;
 
-    for (int i = 0; i < elf->e_shnum; i++)
-    {
+    for (int i = 0; i < elf->e_shnum; i++) {
         if (shdr[i].sh_type != SHT_SYMTAB)
             continue;
         sym = (Elf64_Sym *)((char *)elf + shdr[i].sh_offset);

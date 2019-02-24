@@ -27,18 +27,18 @@ int check_file(const char *filename, struct stat f_info)
 int check_elf_format(Elf64_Ehdr *elf, const char *filename)
 {
     if (elf->e_ident[0] == ELFMAG0 &&
-        elf->e_ident[1] == ELFMAG1 &&
-        elf->e_ident[2] == ELFMAG2 &&
-        elf->e_ident[3] == ELFMAG3) {
-            switch (elf->e_ident[4]) {
-            case ELFCLASS32:
-                return 0;
-            case ELFCLASS64:
-                return nm64(elf);
-            default:
-                printf("nm: %s: File format not recognized\n", filename);
-                return 84;
-            }
+    elf->e_ident[1] == ELFMAG1 &&
+    elf->e_ident[2] == ELFMAG2 &&
+    elf->e_ident[3] == ELFMAG3) {
+        switch (elf->e_ident[4]) {
+        case ELFCLASS32:
+            return 0;
+        case ELFCLASS64:
+            return nm64(elf);
+        default:
+            printf("nm: %s: File format not recognized\n", filename);
+            return 84;
         }
+    }
     return 1;
 }

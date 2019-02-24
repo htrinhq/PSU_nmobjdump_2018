@@ -11,8 +11,7 @@ void display_section_parser(Elf64_Shdr *shdr, char *strtab,
 size_t i, size_t shifted)
 {
     strtab += shifted + shdr[i].sh_offset;
-    for (shifted = 0; shifted < shdr[i].sh_size; shifted += 16)
-    {
+    for (shifted = 0; shifted < shdr[i].sh_size; shifted += 16) {
         printf(" %0*lx", get_zero(shdr[i].sh_addr + shifted),
         shdr[i].sh_addr + shifted);
         print_section(shifted, (unsigned char *)strtab, shdr, i);
