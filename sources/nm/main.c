@@ -7,10 +7,30 @@
 
 #include "nm.h"
 
+
+
 int nm64(Elf64_Ehdr *elf, const char *filename)
 {
-    printf("NM64\n");
-    return 64;
+    Elf64_Shdr *shdr;
+    Elf64_Sym *sym;
+    char *strtab;
+    char *shstrtab;
+    sym_t *symbol;
+
+    shdr = (elf->e_shoff) ? (Elf64_Shdr *)((char *)elf + elf->e_shoff) : NULL;
+    if (shdr == NULL)
+        return 0;
+    shstrtab = (char *)elf + shdr[elf->e_shstrndx].sh_offset;
+    for (int i = 0; i < elf->e_shnum; i++)
+        if (!strcmp(shstrtab + shdr[i].sh_name, ".strtab"))
+            strtab = (char *)elf + shdr[i].sh_offset;
+    for (int i = 0; i < elf->e_shnum; i++) {
+        if (shdr[i].sh_type != SHT_SYMTAB)
+            continue;
+        if (!symbol)
+        sym = (Elf64_Sym *)((char *)elf + shdr[i].sh_offset);
+    }
+    return 0;
 }
 
 int check_file(const char *filename, struct stat f_info)
@@ -65,7 +85,13 @@ int nm_main(const char *filename)
     }
 }
 
-int main(int argc, char const *argv[])
+void name_header(int argc, const char **argv, int i)
+{
+    if (argc > 2)
+        printf("%s:\n", argv[i]);
+}
+
+int main(int argc, char const **argv)
 {
     struct stat f_info;
     int ret = 0;
@@ -77,8 +103,10 @@ int main(int argc, char const *argv[])
     for (int i = 1; i < argc; i++) {
         if (check_file(argv[i], f_info))
             ret = 84;
-        else
+        else {
+            name_header(argc, argv, i);
             ret = nm_main(argv[i]);
+        }
     }
     return ret;
 }

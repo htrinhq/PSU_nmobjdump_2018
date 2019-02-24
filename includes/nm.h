@@ -22,4 +22,11 @@
 #include <sys/mman.h>
 #include "flags.h"
 
+typedef struct sym {
+    char *name;
+    char type;
+    unsigned long long value;
+    struct sym *next;
+} sym_t;
+
 #endif
